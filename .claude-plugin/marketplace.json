@@ -1,0 +1,8 @@
+{
+  "name": "typo3-work-finder",
+  "owner": { "name": "Olivier Dobberkau", "url": "https://github.com/dkd-dobberkau" },
+  "description": "Find TYPO3 Core contributions for newcomers",
+  "plugins": [
+    { "name": "typo3-work-finder", "source": "./" }
+  ]
+}

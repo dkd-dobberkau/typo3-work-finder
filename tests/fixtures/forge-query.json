@@ -1,0 +1,251 @@
+{
+ "issues": [
+  {
+   "id": 1001,
+   "subject": "Typo in label of page module button",
+   "tracker": {
+    "id": 1,
+    "name": "Bug"
+   },
+   "status": {
+    "id": 1,
+    "name": "New"
+   },
+   "category": {
+    "id": 1,
+    "name": "Backend User Interface"
+   },
+   "description": "Steps to reproduce:\n1. Open page module\n2. Hover the button\n\nExpected: 'Separate'\nActual: 'Seperate'",
+   "updated_on": "2026-09-20T10:00:00Z",
+   "created_on": "2026-01-10T10:00:00Z",
+   "project": {
+    "id": 27,
+    "name": "TYPO3 Core"
+   },
+   "custom_fields": [
+    {
+     "id": 4,
+     "name": "TYPO3 Version",
+     "value": "14"
+    },
+    {
+     "id": 3,
+     "name": "Tags",
+     "value": ""
+    },
+    {
+     "id": 8,
+     "name": "Complexity",
+     "value": "no-brainer"
+    }
+   ]
+  },
+  {
+   "id": 1002,
+   "subject": "Rework the whole workspace publishing concept",
+   "tracker": {
+    "id": 1,
+    "name": "Feature"
+   },
+   "status": {
+    "id": 1,
+    "name": "New"
+   },
+   "category": {
+    "id": 1,
+    "name": "Workspaces"
+   },
+   "description": "We should rethink how publishing works.",
+   "updated_on": "2026-09-20T10:00:00Z",
+   "created_on": "2026-01-10T10:00:00Z",
+   "project": {
+    "id": 27,
+    "name": "TYPO3 Core"
+   },
+   "custom_fields": [
+    {
+     "id": 4,
+     "name": "TYPO3 Version",
+     "value": "13"
+    },
+    {
+     "id": 3,
+     "name": "Tags",
+     "value": "ux-decision"
+    },
+    {
+     "id": 8,
+     "name": "Complexity",
+     "value": "easy"
+    }
+   ]
+  },
+  {
+   "id": 1003,
+   "subject": "Missing escaping in record list title",
+   "tracker": {
+    "id": 1,
+    "name": "Bug"
+   },
+   "status": {
+    "id": 1,
+    "name": "Under Review"
+   },
+   "category": {
+    "id": 1,
+    "name": "Backend"
+   },
+   "description": "Title is shown raw.",
+   "updated_on": "2026-09-20T10:00:00Z",
+   "created_on": "2026-01-10T10:00:00Z",
+   "project": {
+    "id": 27,
+    "name": "TYPO3 Core"
+   },
+   "custom_fields": [
+    {
+     "id": 4,
+     "name": "TYPO3 Version",
+     "value": "14"
+    },
+    {
+     "id": 3,
+     "name": "Tags",
+     "value": ""
+    },
+    {
+     "id": 8,
+     "name": "Complexity",
+     "value": "easy"
+    }
+   ]
+  },
+  {
+   "id": 1004,
+   "subject": "Scheduler task label wrong",
+   "tracker": {
+    "id": 1,
+    "name": "Bug"
+   },
+   "status": {
+    "id": 1,
+    "name": "In Progress"
+   },
+   "category": {
+    "id": 1,
+    "name": "scheduler"
+   },
+   "description": "Label shows the class name.",
+   "updated_on": "2026-09-20T10:00:00Z",
+   "created_on": "2026-01-10T10:00:00Z",
+   "project": {
+    "id": 27,
+    "name": "TYPO3 Core"
+   },
+   "custom_fields": [
+    {
+     "id": 4,
+     "name": "TYPO3 Version",
+     "value": "14"
+    },
+    {
+     "id": 3,
+     "name": "Tags",
+     "value": ""
+    },
+    {
+     "id": 8,
+     "name": "Complexity",
+     "value": "easy"
+    }
+   ],
+   "assigned_to": {
+    "id": 9,
+    "name": "Somebody"
+   }
+  },
+  {
+   "id": 1005,
+   "subject": "Old TYPO3 8 rendering glitch",
+   "tracker": {
+    "id": 1,
+    "name": "Bug"
+   },
+   "status": {
+    "id": 1,
+    "name": "New"
+   },
+   "category": {
+    "id": 1,
+    "name": "Frontend"
+   },
+   "description": "Something looks odd.",
+   "updated_on": "2026-09-20T10:00:00Z",
+   "created_on": "2026-01-10T10:00:00Z",
+   "project": {
+    "id": 27,
+    "name": "TYPO3 Core"
+   },
+   "custom_fields": [
+    {
+     "id": 4,
+     "name": "TYPO3 Version",
+     "value": "8"
+    },
+    {
+     "id": 3,
+     "name": "Tags",
+     "value": ""
+    },
+    {
+     "id": 8,
+     "name": "Complexity",
+     "value": "easy"
+    }
+   ]
+  },
+  {
+   "id": 1006,
+   "subject": "Wrong default value for TCA type number",
+   "tracker": {
+    "id": 1,
+    "name": "Bug"
+   },
+   "status": {
+    "id": 1,
+    "name": "Accepted"
+   },
+   "category": {
+    "id": 1,
+    "name": "TCA"
+   },
+   "description": "Steps to reproduce:\n1. Create field type number\n2. Save\n\nExpected 0, actual empty string.",
+   "updated_on": "2026-09-20T10:00:00Z",
+   "created_on": "2026-01-10T10:00:00Z",
+   "project": {
+    "id": 27,
+    "name": "TYPO3 Core"
+   },
+   "custom_fields": [
+    {
+     "id": 4,
+     "name": "TYPO3 Version",
+     "value": "13"
+    },
+    {
+     "id": 3,
+     "name": "Tags",
+     "value": ""
+    },
+    {
+     "id": 8,
+     "name": "Complexity",
+     "value": "easy"
+    }
+   ]
+  }
+ ],
+ "total_count": 6,
+ "offset": 0,
+ "limit": 100
+}

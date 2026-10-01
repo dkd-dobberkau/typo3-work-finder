@@ -1,0 +1,11 @@
+{
+  "name": "typo3-work-finder",
+  "displayName": "TYPO3 Work Finder",
+  "description": "Suggests newcomer-friendly TYPO3 Core contributions from Forge, ranked with TypeSafe Jev, plus patches that wait for review.",
+  "version": "0.1.0",
+  "author": { "name": "Olivier Dobberkau", "url": "https://github.com/dkd-dobberkau" },
+  "homepage": "https://github.com/dkd-dobberkau/typo3-work-finder",
+  "repository": "https://github.com/dkd-dobberkau/typo3-work-finder",
+  "license": "GPL-2.0-or-later",
+  "keywords": ["typo3", "forge", "contribution", "typesafe", "jev"]
+}

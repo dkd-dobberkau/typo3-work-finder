@@ -30,7 +30,10 @@ JEV_MODEL = "jev-latest"
 MAX_DESCRIPTION = 4000
 SKIP_STATUSES = {"On Hold", "Closed", "Rejected", "Resolved"}
 REVIEW_STATUSES = {"Under Review"}
-DEFAULT_WEIGHTS = {"clarity": 0.30, "newcomer_fit": 0.35, "needs_decision": 0.20, "testable": 0.15}
+# Jev judgments plus one code fact: is the reported TYPO3 version still maintained?
+DEFAULT_WEIGHTS = {"clarity": 0.25, "newcomer_fit": 0.30, "needs_decision": 0.15, "testable": 0.10, "current": 0.20}
+UNMAINTAINED_SIGNAL = 0.3
+DECISION_WARNING = 0.5
 
 
 class RetryableError(Exception):
@@ -162,13 +165,15 @@ def jev_state(issue, maintained_majors=()):
     }}
 
 
-def composite(answers, weights=None):
+def composite(answers, weights=None, current=None):
+    """Weighted 0..1 rank. `current` is code knowledge (version maintained?); None = unknown, neutral."""
     weights = weights or DEFAULT_WEIGHTS
     signals = {
         "clarity": answers["clarity"]["score"] / 3,
         "newcomer_fit": answers["newcomer_fit"]["score"] / 3,
         "needs_decision": 1 - answers["needs_decision"]["noul"],
         "testable": answers["testable"]["noul"],
+        "current": 1.0 if current in (True, None) else UNMAINTAINED_SIGNAL,
     }
     total = sum(weights.get(name, 0) for name in signals)
     if total <= 0:
@@ -234,7 +239,8 @@ def run(query_id=219, api_key=None, weights=None, get_json=get_json, jev=call_je
 
         def judge(issue):
             answers = jev(jev_state(issue, maintained), questions, api_key)
-            return dict(issue, answers=answers, rank=composite(answers, weights))
+            current = (issue["typo3_version"] in maintained) if maintained and issue["typo3_version"] else None
+            return dict(issue, answers=answers, current=current, rank=composite(answers, weights, current))
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
             work = list(pool.map(judge, work))
@@ -255,8 +261,11 @@ def render(result, limit=10):
               f"{issue['category'] or 'no category'}, TYPO3 {issue['typo3_version'] or '?'} · rank {issue['rank']:.2f}")
         answers = issue.get("answers")
         if answers:
+            version_note = {True: "maintained", False: "unmaintained version: reproduce on main first", None: "version unknown"}[issue.get("current")]
             print(f"   clarity {answers['clarity']['score']:.1f}/3 · newcomer_fit {answers['newcomer_fit']['score']:.1f}/3 · "
-                  f"needs_decision {answers['needs_decision']['noul']:.2f} · testable {answers['testable']['noul']:.2f}")
+                  f"needs_decision {answers['needs_decision']['noul']:.2f} · testable {answers['testable']['noul']:.2f} · {version_note}")
+            if answers["needs_decision"]["noul"] > DECISION_WARNING:
+                print("   ⚠ may need a Core team decision first: ask in #typo3-cms-coredev before coding")
         print(f"   {issue['url']}")
     if result["review"]:
         print(f"\n## Waiting for review or testing ({len(result['review'])})\n")
@@ -282,7 +291,7 @@ def main(argv=None):
     parser.add_argument("--query-id", type=int, default=219)
     parser.add_argument("--limit", type=int, default=10)
     parser.add_argument("--json", action="store_true", help="print the full result as JSON")
-    parser.add_argument("--weights", help="e.g. clarity=0.3,newcomer_fit=0.4,needs_decision=0.2,testable=0.1")
+    parser.add_argument("--weights", help="e.g. clarity=0.25,newcomer_fit=0.3,needs_decision=0.15,testable=0.1,current=0.2")
     parser.add_argument("--no-jev", action="store_true", help="use the heuristic even if TYPESAFE_API_KEY is set")
     args = parser.parse_args(argv)
     api_key = None if args.no_jev else os.environ.get("TYPESAFE_API_KEY")

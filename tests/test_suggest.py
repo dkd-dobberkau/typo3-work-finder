@@ -77,8 +77,14 @@ class RankingTest(unittest.TestCase):
         good = suggest.composite(self.answers(3, 3, 0.05, 0.9))
         vague = suggest.composite(self.answers(0.5, 1, 0.8, 0.3))
         self.assertGreater(good, 0.85)
-        self.assertLess(vague, 0.35)
+        self.assertGreater(good - vague, 0.4)
         self.assertTrue(0.0 <= vague <= good <= 1.0)
+
+    def test_unmaintained_version_ranks_lower(self):
+        answers = self.answers(3, 3, 0.05, 0.9)
+        self.assertGreater(suggest.composite(answers, current=True), suggest.composite(answers, current=False))
+        # unknown maintenance info is neutral
+        self.assertAlmostEqual(suggest.composite(answers, current=None), suggest.composite(answers, current=True))
 
     def test_custom_weights(self):
         answers = self.answers(0, 3, 0.0, 0.0)
@@ -134,6 +140,16 @@ class EndToEndTest(unittest.TestCase):
         self.assertIn("Waiting for review", text)
         self.assertIn("https://review.typo3.org/c/Packages/TYPO3.CMS/+/96111", text)
         self.assertIn("clarity", text)
+
+    def test_decision_warning(self):
+        issue = {"id": 1, "subject": "S", "tracker": "Feature", "category": "", "typo3_version": "14", "url": "u",
+                 "rank": 0.8, "current": True, "answers": {
+                     "clarity": {"score": 3}, "newcomer_fit": {"score": 3},
+                     "needs_decision": {"noul": 0.6}, "testable": {"noul": 0.9}}}
+        buffer = io.StringIO()
+        with redirect_stdout(buffer):
+            suggest.render({"query_id": 219, "mode": "jev", "work": [issue], "review": [], "skipped": []})
+        self.assertIn("may need a Core team decision first", buffer.getvalue())
 
     def test_run_without_key_uses_heuristic(self):
         result = suggest.run(query_id=219, api_key=None,

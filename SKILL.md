@@ -13,14 +13,16 @@ Skill directory: `${CLAUDE_SKILL_DIR}`. Scripts below are relative to it.
 1. **Start here:** tickets nobody is working on, ranked for newcomers.
 2. **Waiting for review:** tickets that already have an open Gerrit change. Reviewing and testing those is often the fastest useful contribution.
 
-Code does the hard filtering: status, assignee, open Gerrit change. Ranking uses TypeSafe Jev judgments if `TYPESAFE_API_KEY` is set (clarity, newcomer fit, needs a decision, testable). Without a key it falls back to a heuristic, and the output says which mode ran.
+Code does the hard filtering: status, assignee, open Gerrit change. Ranking uses TypeSafe Jev judgments if `TYPESAFE_API_KEY` is set (clarity, newcomer fit, needs a decision, testable). A code signal (is the reported TYPO3 version still maintained?) is weighted in. Without a key the script falls back to a heuristic, and the output says which mode ran.
+
+If `TYPESAFE_API_KEY` is not set, ask the human where the key is stored. In 1Password, for example, pass it inline: `TYPESAFE_API_KEY="$(op read 'op://<vault>/<item>/TYPESAFE_API_KEY')" python3 …`. Never print the key.
 
 ## Run
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/suggest.py --limit 10
 python3 ${CLAUDE_SKILL_DIR}/scripts/suggest.py --json            # full result incl. raw judgments
-python3 ${CLAUDE_SKILL_DIR}/scripts/suggest.py --weights newcomer_fit=0.5,clarity=0.3,testable=0.2
+python3 ${CLAUDE_SKILL_DIR}/scripts/suggest.py --weights newcomer_fit=0.4,clarity=0.3,current=0.3
 python3 ${CLAUDE_SKILL_DIR}/scripts/suggest.py --query-id <other saved Forge query>
 ```
 
@@ -38,6 +40,7 @@ The script only reads; it never writes to Forge or Gerrit. With Jev it sends one
 | Mistake | Instead |
 |---|---|
 | Treating the rank as a verdict | It is a hint. Read the ticket; old "easy" labels are often wrong |
+| Ignoring "⚠ may need a Core team decision first" | Ask in `#typo3-cms-coredev` before writing code |
 | Picking a ticket from the review list to patch again | Review or test the existing change instead |
 | Starting work on a ticket for an unmaintained TYPO3 version | Reproduce on `main` first |
 | Showing a heuristic ranking as if Jev had judged it | Say which mode ran (`ranking: jev` or `heuristic`) |
